@@ -4,8 +4,9 @@ const router = express.Router()
 const zod = require('zod');
 const SECRET = require('../config/config');
 const jwt = require('jsonwebtoken');
+const authMiddleWare = require('../Middlewares/auth');
 
-router.post('/login', async(req,res)=> {
+router.post('/login', authMiddleWare ,async(req,res)=> {
     const userLogin = zod.object({
         username: zod.string().min(6).email(),
         password : zod.string().min(6)
@@ -30,7 +31,7 @@ router.post('/login', async(req,res)=> {
     }
 })
 
-router.post('/sign-up', async (req,res)=> {
+router.post('/sign-up' ,async (req,res)=> {
     const userSignup = zod.object({
         username: zod.string().min(6).email(),
         password : zod.string().min(6),
