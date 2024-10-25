@@ -73,4 +73,36 @@ router.post('/sign-up' ,async (req,res)=> {
         console.log(error);
     }
 })
+
+router.put('/update', authMiddleWare ,async(req,res)=> {
+    const updateBody = zod.object({
+        username: zod.string().optional(),
+        password: zod.string().optional(),
+        firstName: zod.string().optional(),
+        lastName: zod.string().optional(),
+    })
+
+    const result = updateBody.safeParse(req.body);
+    if(!result) {
+        return res.status(411).json({
+            msg:"User not Found"
+        });
+    }
+
+    try {
+        const user = await userModel.findOne({username: req.body.username});
+        const data = await userModel.updateOne({_id: user._id}, req.body);
+
+        res.status(200).json({
+            msg: "User details Updated successfully"
+        });
+    } catch (error) {
+        return res.status(411).json({
+            msg:"User not Found"
+        });
+    }
+
+})
+
+
 module.exports = router;

@@ -28,10 +28,10 @@ const authMiddleWare = async (req,res,next) => {
             });
         }
     } catch (error) {
-        // return res.status(411).json({
-        //     msg: "User Not Verified"
-        // });
-        console.log(error)
+        return res.status(411).json({
+            msg: "User Not Verified"
+        });
+        
     }
 }
 

@@ -8,9 +8,7 @@ const cors = require('cors');
 app.use(express.json());
 app.use(cors());
 app.use('/auth', require('./Routes/AuthRoute'));
-
-
-
+app.use('/users',require('./Routes/UserRoute'))
 
 app.listen(3000,()=> {
     console.log("Server Started on port 3000");
