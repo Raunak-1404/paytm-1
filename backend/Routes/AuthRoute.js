@@ -5,6 +5,8 @@ const zod = require('zod');
 const SECRET = require('../config/config');
 const jwt = require('jsonwebtoken');
 const authMiddleWare = require('../Middlewares/auth');
+const AccountTable = require('../DB/Schema/BankSchema');
+
 
 router.post('/login', authMiddleWare ,async(req,res)=> {
     const userLogin = zod.object({
@@ -63,6 +65,12 @@ router.post('/sign-up' ,async (req,res)=> {
         });
 
         const userID = data._id;
+
+        await AccountTable.create({
+            userID,
+            balance: Math.floor(10 + (Math.random() * 100000))
+        });
+
         const token = jwt.sign({userID}, SECRET)
 
         res.status(200).json({
