@@ -26,7 +26,14 @@ const SignIn = () => {
 
             const UserData = res.data.userData;
             const balance = res.data.balance
-            console.log(res)            
+               
+            
+            localStorage.setItem('currentUser ', JSON.stringify({
+                firstName: UserData.firstName,
+                lastName: UserData.lastName,
+                balance: balance,
+                id: UserData._id
+            }));
             
             setCurrentUser({
                 firstName: UserData.firstName,

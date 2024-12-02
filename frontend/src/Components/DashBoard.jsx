@@ -1,15 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import Users from './Users';
 import Axios from '../atoms/axios';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import CurrentUser from '../atoms/CurrentUser';
 
 const DashBoard = () => {
   const axiosInstance = useRecoilValue(Axios);
   const [searches, setSearches] = useState(""); 
   const [users, setUsers] = useState([]);
-  const currentUser = useRecoilValue(CurrentUser);
+  // const currentUser = useRecoilValue(CurrentUser);
+  const [currentUser , setCurrentUser ] = useRecoilState(CurrentUser );
   
+  
+  useEffect(() => {
+    // Retrieve user data from local storage
+    const storedUser  = localStorage.getItem('currentUser ');
+    if (storedUser ) {
+        setCurrentUser (JSON.parse(storedUser ));
+    }
+  }, []);
   
   const getSearches = async () => {
     try {
