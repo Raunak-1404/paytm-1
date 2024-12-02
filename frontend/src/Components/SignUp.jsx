@@ -21,7 +21,7 @@ const SignUp = () => {
             const res = await axiosInstance.post('/auth/sign-up', data);
             alert("User Created Successfully");
             localStorage.setItem('token', res.data.token);
-            navigate('/dashboard');
+            navigate('/signin');
         } catch (error) {
             console.log(error);
         }

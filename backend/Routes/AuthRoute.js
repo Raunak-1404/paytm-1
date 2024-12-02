@@ -23,9 +23,14 @@ router.post('/login', authMiddleWare ,async(req,res)=> {
         const data = await userModel.findOne({username: req.body.username});
         if(data){
             const token = jwt.sign({userID:data._id}, SECRET);
+            const bankDetails = await AccountTable.findOne({userID: data._id})
+            console.log(data);
             res.status(200).json({
                 msg: "Logged In Successfully",
-                token: token
+                token: token,
+                userData: data,
+                balance: bankDetails.balance,
+                id: data._id
             });
         }
     } catch (error) {
@@ -72,13 +77,13 @@ router.post('/sign-up' ,async (req,res)=> {
         });
 
         const token = jwt.sign({userID}, SECRET)
-
+        
         res.status(200).json({
             msg: "User created Successfully",
             token: token
         });
     } catch (error) {
-        console.log(error);
+        console.log(error)
     }
 })
 

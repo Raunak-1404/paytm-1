@@ -5,37 +5,40 @@ const zod = require('zod');
 
 router.get('/get-users', async (req,res)=> {
     const filter = req.query.filter || "";
+    if(filter.length === 0) {
+        return res.json([]);
+    }
     
     try {
         const users = await userModel.find({
             $or:[
                 {
                     firstName: {
-                        "$regex": filter
+                        "$regex": filter,
+                        "$options": "i"
                     }
                 },
                 {
                     lastName: {
-                        "$regex": filter
+                        "$regex": filter,
+                        "$options": "i"
                     }
                 }
             ]
         });
 
         if(users.length === 0) {
-            return res.status(411).json({
-                msg: "User Not found"
-            })
+            return res.json([]);
         }
 
-        res.status(200).json({
-            user: users.map((user)=>({
+        res.status(200).json(
+            users.map((user) => ({
                 username: user.username,
                 firstName: user.firstName,
-                lastname: user.lastName,
+                lastName: user.lastName,
                 _id: user._id
             }))
-        });
+        );
 
     } catch (error) {
         res.status(411).json({
