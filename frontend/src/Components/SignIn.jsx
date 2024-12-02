@@ -2,17 +2,20 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import Axios from '../atoms/axios';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import CurrentUser from '../atoms/CurrentUser';
+
 
 const SignIn = () => {
     const navigate = useNavigate();
     const axiosInstance = useRecoilValue(Axios);
     const { register, handleSubmit, reset } = useForm();
+    const [currentUser, setCurrentUser] = useRecoilState(CurrentUser);
 
     const submitHandler = async (data) => {
         try {
             const token = localStorage.getItem('token');
-            console.log(token)
+            // console.log(token)
 
             const res = await axiosInstance.post('/auth/login', data, {
               headers: {
@@ -20,6 +23,25 @@ const SignIn = () => {
                 'Content-Type': 'application/json',
               }
             });
+
+            const UserData = res.data.userData;
+            const balance = res.data.balance
+               
+            
+            localStorage.setItem('currentUser ', JSON.stringify({
+                firstName: UserData.firstName,
+                lastName: UserData.lastName,
+                balance: balance,
+                id: UserData._id
+            }));
+            
+            setCurrentUser({
+                firstName: UserData.firstName,
+                lastName: UserData.lastName,
+                balance: balance,
+                id: UserData._id
+            })
+            
 
             alert("User Authenticated Successfully");
             navigate('/dashboard');

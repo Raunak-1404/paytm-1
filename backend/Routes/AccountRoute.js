@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const AccountTable = require('../DB/Schema/BankSchema');
-const authMiddleWare = require('../Middlewares/auth');
+const authMiddleware = require('../Middlewares/auth');
 
 const router = express.Router();
 
@@ -13,7 +13,7 @@ router.get('/balance', async(req,res)=> {
     });
 });
 
-router.post('/transfer', async (req, res) => {
+router.post('/transfer', authMiddleware ,async (req, res) => {
     const { from, to, money } = req.body;
 
     try {
